@@ -6,28 +6,25 @@ let remainingLine;
 let displayedKm = 0;
 let animationFrame = null;
 
-const IMAGE_WIDTH = 5000;
-const IMAGE_HEIGHT = 3000;
+const IMAGE_WIDTH = 2048;
+const IMAGE_HEIGHT = 1536;
 
 const TOTAL_KM = 2863;
 
 const milestones = [
-  { name: "Hobbiton", km: 0 },
-  { name: "Bree", km: 220 },
-  { name: "Weathertop", km: 300 },
-  { name: "Rivendell", km: 740 },
-  { name: "Redhorn Pass", km: 870 },
-  { name: "Moria (East Gate)", km: 1000 },
-  { name: "Lothlórien", km: 1060 },
-  { name: "Amon Hen", km: 1350 },
-  { name: "Dead Marshes", km: 1900 },
-  { name: "Ithilien", km: 2250 },
-  { name: "Cirith Ungol", km: 2600 },
-  { name: "Mount Doom", km: 2863 }
+  { name: "Hobbiton", km: 0, coord: [1113, 525] },
+  { name: "Bree", km: 220, coord: [1105, 666] },
+  { name: "Weathertop", km: 300, coord: [1111, 772] },
+  { name: "Rivendell", km: 740, coord: [1129, 990] },
+  { name: "Redhorn Pass", km: 870, coord: [1029, 1002] },
+  { name: "Moria (East Gate)", km: 1000, coord: [945, 990] },
+  { name: "Lothlórien", km: 1060, coord: [884, 1060] },
+  { name: "Amon Hen", km: 1350, coord: [595, 1204] },
+  { name: "Dead Marshes", km: 1900, coord: [606, 1306] },
+  { name: "Ithilien", km: 2250, coord: [544, 1344] },
+  { name: "Cirith Ungol", km: 2600, coord: [464, 1364] },
+  { name: "Mount Doom", km: 2863, coord: [507, 1451] }
 ];
-
-// TEMP: simulated distance (replace later with Strava)
-//let simulatedKm = 5; // try 740 = Rivendell
 
 // =======================
 // MAP SETUP
@@ -38,66 +35,111 @@ const map = L.map('map', {
   minZoom: -2,
   maxZoom: 2
 });
+console.log("map exists:", !!map);
+
+map.createPane("milestones");
+map.getPane("milestones").style.zIndex = 650;
 
 const bounds = [[0, 0], [IMAGE_HEIGHT, IMAGE_WIDTH]];
 
 L.imageOverlay('LOTR_complete_map.jpg', bounds).addTo(map);
 map.fitBounds(bounds);
 
+map.on("click", (e) => {
+  const x = e.latlng.lng;
+  const y = e.latlng.lat;
+
+  L.circleMarker([y, x], {
+    radius: 4,
+    color: "red"
+  }).addTo(map);
+
+  console.log(`[${Math.round(y)}, ${Math.round(x)}],`);
+});
+
 // =======================
 // ROUTE (PIXEL COORDS)
 // =======================
 
 const route = [
-  [760, 620],   // Hobbiton (Shire)
-  [735, 700],   // Bywater / Eastfarthing
-  [710, 820],   // Bree
-  [690, 930],   // Weather Hills / Weathertop
-  [660, 1100],  // Trollshaws
-  [640, 1180],  // Rivendell
+  [1113, 525],  // Hobbiton (Shire)
+  [1124, 580],  // Brandywine Bridge
+  [1105, 666],  // Bree
+  [1111, 772],  // Weather Hills / Weathertop
+  [1125, 930],  // Trollshaws
+  [1129, 990],  // Rivendell
 
-  [660, 1260],  // East of Rivendell
-  [690, 1320],  // Redhorn Pass (Caradhras)
-  [720, 1350],  // West-gate of Moria
-  [740, 1380],  // East-gate of Moria
+  [1113, 1010],  // East of Rivendell
+  [1029, 1002],  // Redhorn Pass (Caradhras)
+  [943, 967],  // West-gate of Moria
+  [945, 990],  // East-gate of Moria
 
-  [760, 1400],  // Lothlórien (Caras Galadhon)
-  [820, 1420],  // Anduin south
-  [900, 1450],  // Sarn Gebir
-  [980, 1480],  // Rauros / Amon Hen
+  [884, 1060],  // Lothlórien (Caras Galadhon)
+  [878, 1096],  // Anduin south
+  [625, 1208],  // Sarn Gebir
+  [595, 1204],  // Rauros / Amon Hen
 
-  [1080, 1500], // Emyn Muil
-  [1150, 1490], // Dead Marshes
-  [1200, 1460], // Ithilien
+  [672, 1238], // Emyn Muil
+  [606, 1306], // Dead Marshes
+  [544, 1344], // Ithilien
 
-  [1220, 1420], // Crossroads
-  [1250, 1400], // Osgiliath (east bank)
+  [463, 1347], // Crossroads
+  [435, 1352],   // Osgiliath (east bank)
 
-  [1280, 1380], // Morgul Vale
-  [1320, 1400], // Cirith Ungol
-  [1360, 1420], // Plateau of Gorgoroth
+  [451, 1357], // Morgul Vale
+  [464, 1364], // Cirith Ungol
+  [470, 1439], // Plateau of Gorgoroth
 
-  [1380, 1460], // North of Mount Doom
-  [1400, 1480]  // Mount Doom (Orodruin)
+  [517, 1443], // North of Mount Doom
+  [507, 1451]  // Mount Doom (Orodruin)
 ];
+console.log("route length:", route.length);
 
 // Draw route
-//const routeLine = L.polyline(route, {
-//  color: '#c2a35a',
-//  weight: 4
-//}).addTo(map);
+function buildRouteGeometry(route) {
+  let totalLength = 0;
+  const segments = [];
 
-milestones.forEach((m, i) => {
-  const ratio = m.km / TOTAL_KM;
-  const pos = getPointAtRatio(route, ratio);
+  for (let i = 0; i < route.length - 1; i++) {
+    const [y1, x1] = route[i];
+    const [y2, x2] = route[i + 1];
 
-  L.circleMarker(pos, {
-    radius: 4,
-    color: '#888',
-    fillColor: '#888',
-    fillOpacity: 1
+    const length = Math.hypot(y2 - y1, x2 - x1);
+    segments.push({
+      from: route[i],
+      to: route[i + 1],
+      length
+    });
+
+    totalLength += length;
+  }
+
+  return { segments, totalLength };
+}
+
+const routeGeom = buildRouteGeometry(route);
+console.log("routeGeom is:", routeGeom);
+console.log("segments:", routeGeom.segments);
+console.log("is array:", Array.isArray(routeGeom.segments));
+
+milestones.forEach(m => {
+  L.circleMarker(m.coord, {
+    pane: "milestones",
+    radius: 5,
+    color: "#222",
+    fillColor: "#ffd54f",
+    fillOpacity: 1,
+    weight: 2
   })
-  .bindTooltip(m.name)
+  .bindTooltip(
+    `<strong>${m.name}</strong><br>${m.km} km`,
+    {
+      direction: "top",
+      offset: [0, -6],
+      opacity: 0.95,
+      sticky: true
+    }
+  )
   .addTo(map);
 });
 
@@ -125,31 +167,6 @@ function getPolylineLength(points) {
   return length;
 }
 
-function getPointAtRatio(points, ratio) {
-  const target = getPolylineLength(points) * ratio;
-  let traveled = 0;
-
-  for (let i = 1; i < points.length; i++) {
-    const p1 = L.point(points[i - 1][1], points[i - 1][0]);
-    const p2 = L.point(points[i][1], points[i][0]);
-    const segLength = p1.distanceTo(p2);
-
-    if (traveled + segLength >= target) {
-      const remaining = target - traveled;
-      const t = remaining / segLength;
-
-      return [
-        p1.y + (p2.y - p1.y) * t,
-        p1.x + (p2.x - p1.x) * t
-      ];
-    }
-
-    traveled += segLength;
-  }
-
-  return points[points.length - 1];
-}
-
 function getCurrentMilestone(km) {
   let current = milestones[0];
   let next = milestones[milestones.length - 1];
@@ -164,72 +181,66 @@ function getCurrentMilestone(km) {
   return { current, next };
 }
 
-function splitRouteAtRatio(points, ratio) {
-  const target = getPolylineLength(points) * ratio;
-
-  let traveled = 0;
-  const completed = [];
-  const remaining = [];
-
-  for (let i = 1; i < points.length; i++) {
-    const p1 = L.point(points[i - 1][1], points[i - 1][0]);
-    const p2 = L.point(points[i][1], points[i][0]);
-    const segLength = p1.distanceTo(p2);
-
-    if (traveled + segLength < target) {
-      completed.push([p1.y, p1.x]);
-      traveled += segLength;
-    } else {
-      const t = Math.max((target - traveled) / segLength, 0);
-      const splitPoint = [
-        p1.y + (p2.y - p1.y) * t,
-        p1.x + (p2.x - p1.x) * t
-      ];
-
-      completed.push([p1.y, p1.x], splitPoint);
-      remaining.push(splitPoint, [p2.y, p2.x]);
-
-      for (let j = i + 1; j < points.length; j++) {
-        remaining.push(points[j]);
-      }
-      break;
-    }
-  }
-
-  return { completed, remaining };
-}
-
 // =======================
 // UPDATE POSITION
 // =======================
 
 function renderJourney(km) {
   const ratio = Math.min(km / TOTAL_KM, 1);
-  const pos = getPointAtRatio(route, ratio);
+
+  // 🟢 START-OF-JOURNEY GUARD (CRITICAL)
+  if (km <= 0.01) {
+    marker.setLatLng(route[0]);
+
+    if (completedLine) map.removeLayer(completedLine);
+    if (remainingLine) map.removeLayer(remainingLine);
+
+    // Draw full route as dashed "remaining"
+    remainingLine = L.polyline(route, {
+      color: '#888',
+      weight: 3,
+      dashArray: '6,6'
+    }).addTo(map);
+
+    document.getElementById('status').innerHTML = `
+      <div>0.0 km walked (0.0%)</div>
+      <div><em>At Hobbiton — the journey begins</em></div>
+    `;
+    return;
+  }
+
+  // 🟢 NORMAL CASE
+  const pos = getPointAtRatio(routeGeom, ratio);
   marker.setLatLng(pos);
 
-  const { completed, remaining } = splitRouteAtRatio(route, ratio);
+  const { completed, remaining } = splitRouteAtRatio(routeGeom, ratio);
 
   if (completedLine) map.removeLayer(completedLine);
   if (remainingLine) map.removeLayer(remainingLine);
 
-  completedLine = L.polyline(completed, {
-    color: '#4caf50',
-    weight: 5
-  }).addTo(map);
+  // Draw completed part
+  if (completed.length >= 2) {
+    completedLine = L.polyline(completed, {
+      color: '#4caf50',
+      weight: 5
+    }).addTo(map);
+  }
 
-  remainingLine = L.polyline(remaining, {
-    color: '#888',
-    weight: 3,
-    dashArray: '6,6'
-  }).addTo(map);
+  // Draw remaining part
+  if (remaining.length >= 2) {
+    remainingLine = L.polyline(remaining, {
+      color: '#888',
+      weight: 3,
+      dashArray: '6,6'
+    }).addTo(map);
+  }
 
   const { current, next } = getCurrentMilestone(km);
 
   let locationText;
   if (!next) {
     locationText = "Journey Complete — Mount Doom reached";
-  } else if (km === current.km) {
+  } else if (Math.abs(km - current.km) < 0.01) {
     locationText = `Arrived at ${current.name}`;
   } else {
     locationText = `Between ${current.name} and ${next.name}`;
@@ -240,6 +251,60 @@ function renderJourney(km) {
     <div><em>${locationText}</em></div>
   `;
 }
+
+
+function getPointAtRatio(routeGeom, ratio) {
+  let target = routeGeom.totalLength * ratio;
+
+  for (const seg of routeGeom.segments) {
+    if (target <= seg.length) {
+      const t = target / seg.length;
+      return [
+        seg.from[0] + (seg.to[0] - seg.from[0]) * t,
+        seg.from[1] + (seg.to[1] - seg.from[1]) * t
+      ];
+    }
+    target -= seg.length;
+  }
+
+  return routeGeom.segments.at(-1).to;
+}
+
+function splitRouteAtRatio(routeGeom, ratio) {
+  let target = routeGeom.totalLength * ratio;
+
+  const completed = [];
+  const remaining = [];
+
+  completed.push(routeGeom.segments[0].from);
+
+  for (let i = 0; i < routeGeom.segments.length; i++) {
+    const seg = routeGeom.segments[i];
+
+    if (target >= seg.length) {
+      completed.push(seg.to);
+      target -= seg.length;
+    } else {
+      const t = target / seg.length;
+      const splitPoint = [
+        seg.from[0] + (seg.to[0] - seg.from[0]) * t,
+        seg.from[1] + (seg.to[1] - seg.from[1]) * t
+      ];
+
+      completed.push(splitPoint);
+      remaining.push(splitPoint);
+
+      // 🔑 ADD ALL REMAINING SEGMENT ENDS
+      for (let j = i; j < routeGeom.segments.length; j++) {
+        remaining.push(routeGeom.segments[j].to);
+      }
+      break;
+    }
+  }
+
+  return { completed, remaining };
+}
+
 
 function animateToKm(targetKm) {
   if (animationFrame) {
@@ -271,14 +336,12 @@ function animateToKm(targetKm) {
   animationFrame = requestAnimationFrame(step);
 }
 
-// Initial update
-displayedKm = simulatedKm;
 renderJourney(displayedKm);
 
 // TEMP: test animation after load
-setTimeout(() => {
-  animateToKm(kmFromStrava);
-}, 1500);
+//setTimeout(() => {
+//  animateToKm(kmFromStrava);
+//}, 1500);
 
 async function syncFromStrava() {
   try {
@@ -291,3 +354,5 @@ async function syncFromStrava() {
     alert("Failed to sync from Strava");
   }
 }
+
+//L.polyline(route, { color: "blue", weight: 4 }).addTo(map);
