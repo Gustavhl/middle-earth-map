@@ -49,16 +49,36 @@ map.fitBounds(bounds);
 // =======================
 
 const route = [
-  [610, 820],    // Hobbiton
-  [640, 1100],   // Bree
-  [680, 1400],   // Weathertop
-  [720, 1750],   // Rivendell
-  [800, 1900],   // Redhorn
-  [900, 2000],   // Moria exit
-  [950, 2100],   // Lothlorien
-  [1200, 2400],  // Anduin
-  [1600, 3000],  // Dead Marshes
-  [1830, 4120]   // Mount Doom
+  [760, 620],   // Hobbiton (Shire)
+  [735, 700],   // Bywater / Eastfarthing
+  [710, 820],   // Bree
+  [690, 930],   // Weather Hills / Weathertop
+  [660, 1100],  // Trollshaws
+  [640, 1180],  // Rivendell
+
+  [660, 1260],  // East of Rivendell
+  [690, 1320],  // Redhorn Pass (Caradhras)
+  [720, 1350],  // West-gate of Moria
+  [740, 1380],  // East-gate of Moria
+
+  [760, 1400],  // Lothlórien (Caras Galadhon)
+  [820, 1420],  // Anduin south
+  [900, 1450],  // Sarn Gebir
+  [980, 1480],  // Rauros / Amon Hen
+
+  [1080, 1500], // Emyn Muil
+  [1150, 1490], // Dead Marshes
+  [1200, 1460], // Ithilien
+
+  [1220, 1420], // Crossroads
+  [1250, 1400], // Osgiliath (east bank)
+
+  [1280, 1380], // Morgul Vale
+  [1320, 1400], // Cirith Ungol
+  [1360, 1420], // Plateau of Gorgoroth
+
+  [1380, 1460], // North of Mount Doom
+  [1400, 1480]  // Mount Doom (Orodruin)
 ];
 
 // Draw route
