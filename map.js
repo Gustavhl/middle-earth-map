@@ -362,7 +362,7 @@ function splitRouteAtRatio(routeGeom, ratio) {
   return { completed, remaining };
 }
 
-
+}
 function animateToKm(targetKm) {
   if (animationFrame) {
     cancelAnimationFrame(animationFrame);
@@ -394,7 +394,7 @@ function animateToKm(targetKm) {
 }
 
 renderJourney(displayedKm);
-}
+
 // TEMP: test animation after load
 //setTimeout(() => {
 //  animateToKm(kmFromStrava);
