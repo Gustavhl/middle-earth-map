@@ -6,6 +6,61 @@ let remainingLine;
 let displayedKm = 0;
 let animationFrame = null;
 
+const BACKEND_URL = "https://middle-earth-strava.onrender.com";
+
+function getStoredToken() {
+  return localStorage.getItem("authToken");
+}
+
+function setToken(token) {
+  localStorage.setItem("authToken", token);
+}
+
+function clearToken() {
+  localStorage.removeItem("authToken");
+}
+
+async function validateToken(token) {
+  const res = await fetch(`${BACKEND_URL}/auth-check`, {
+    headers: {
+      "x-auth-token": token
+    }
+  });
+
+  return res.ok;
+}
+
+async function loginFlow() {
+  const overlay = document.getElementById("login-overlay");
+  const btn = document.getElementById("login-btn");
+  const input = document.getElementById("password");
+  const error = document.getElementById("login-error");
+
+  async function attemptLogin(token) {
+    const ok = await validateToken(token);
+    if (!ok) {
+      error.textContent = "Invalid password";
+      clearToken();
+      return;
+    }
+
+    overlay.style.display = "none";
+    initApp(); // 🚀 ONLY NOW load the map
+  }
+
+  btn.onclick = async () => {
+    const token = input.value.trim();
+    if (!token) return;
+    setToken(token);
+    await attemptLogin(token);
+  };
+
+  const existing = getStoredToken();
+  if (existing) {
+    await attemptLogin(existing);
+  }
+}
+
 const IMAGE_WIDTH = 2048;
 const IMAGE_HEIGHT = 1536;
 
@@ -29,6 +84,8 @@ const milestones = [
 // =======================
 // MAP SETUP
 // =======================
+function initApp() {
+  // EVERYTHING map-related goes here
 
 const map = L.map('map', {
   crs: L.CRS.Simple,
@@ -337,7 +394,7 @@ function animateToKm(targetKm) {
 }
 
 renderJourney(displayedKm);
-
+}
 // TEMP: test animation after load
 //setTimeout(() => {
 //  animateToKm(kmFromStrava);
@@ -355,4 +412,4 @@ async function syncFromStrava() {
   }
 }
 
-//L.polyline(route, { color: "blue", weight: 4 }).addTo(map);
+loginFlow();
