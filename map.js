@@ -362,43 +362,29 @@ function splitRouteAtRatio(routeGeom, ratio) {
   return { completed, remaining };
 }
 
-renderJourney(displayedKm);
-
-}
 function animateToKm(targetKm) {
-  if (animationFrame) {
-    cancelAnimationFrame(animationFrame);
-  }
+    const startKm = displayedKm;
+    const delta = targetKm - startKm;
+    const duration = Math.min(Math.abs(delta) * 8, 2000);
+    const startTime = performance.now();
 
-  const startKm = displayedKm;
-  const delta = targetKm - startKm;
-  const duration = Math.min(Math.abs(delta) * 10, 2000); // max 2s
+    function step(now) {
+      const t = Math.min((now - startTime) / duration, 1);
+      const eased = t * t * (3 - 2 * t);
 
-  const startTime = performance.now();
-
-  function step(now) {
-    const elapsed = now - startTime;
-    const t = Math.min(elapsed / duration, 1);
-    const eased = t * t * (3 - 2 * t); // smoothstep
-
-    displayedKm = startKm + delta * eased;
-    renderJourney(displayedKm);
-
-    if (t < 1) {
-      animationFrame = requestAnimationFrame(step);
-    } else {
-      displayedKm = targetKm;
+      displayedKm = startKm + delta * eased;
       renderJourney(displayedKm);
+
+      if (t < 1) requestAnimationFrame(step);
     }
-  }
 
-  animationFrame = requestAnimationFrame(step);
+    requestAnimationFrame(step);
 }
+  // expose it so the button can call it
+  window.animateToKm = animateToKm;
 
-// TEMP: test animation after load
-//setTimeout(() => {
-//  animateToKm(kmFromStrava);
-//}, 1500);
+renderJourney(displayedKm);
+}
 
 async function syncFromStrava() {
   const token = localStorage.getItem("authToken");
