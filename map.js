@@ -401,15 +401,21 @@ renderJourney(displayedKm);
 //}, 1500);
 
 async function syncFromStrava() {
-  try {
-    const res = await fetch("https://middle-earth-strava.onrender.com/distance");
-    const data = await res.json();
+  const token = localStorage.getItem("authToken");
 
-    const km = data.meters / 1000;
-    animateToKm(km);
-  } catch (err) {
-    alert("Failed to sync from Strava");
+  const res = await fetch(`${BACKEND_URL}/distance`, {
+    headers: {
+      "x-auth-token": token
+    }
+  });
+
+  if (res.status === 401) {
+    alert("Unauthorized — please log in again");
+    return;
   }
+
+  const data = await res.json();
+  animateToKm(data.meters / 1000);
 }
 
 loginFlow();
