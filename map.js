@@ -362,6 +362,8 @@ function splitRouteAtRatio(routeGeom, ratio) {
   return { completed, remaining };
 }
 
+renderJourney(displayedKm);
+
 }
 function animateToKm(targetKm) {
   if (animationFrame) {
@@ -392,8 +394,6 @@ function animateToKm(targetKm) {
 
   animationFrame = requestAnimationFrame(step);
 }
-
-renderJourney(displayedKm);
 
 // TEMP: test animation after load
 //setTimeout(() => {
