@@ -68,6 +68,7 @@ const TOTAL_KM = 2863;
 
 const milestones = [
   { name: "Hobbiton", km: 0, coord: [1113, 525] },
+  { name: "House of Tom Bombadil", km: 120, coord: [{]1083, 616] },
   { name: "Bree", km: 220, coord: [1105, 666] },
   { name: "Weathertop", km: 300, coord: [1111, 772] },
   { name: "Rivendell", km: 740, coord: [1129, 990] },
@@ -121,6 +122,7 @@ map.on("click", (e) => {
 const route = [
   [1113, 525],  // Hobbiton (Shire)
   [1124, 580],  // Brandywine Bridge
+  [1083, 616],  // House of Tom Bombadil
   [1105, 666],  // Bree
   [1111, 772],  // Weather Hills / Weathertop
   [1125, 930],  // Trollshaws
