@@ -7,6 +7,11 @@ let displayedKm = 0;
 let animationFrame = null;
 
 const BACKEND_URL = "https://middle-earth-strava.onrender.com";
+const ROUTE_COLORS = {
+        completed: "#4caf50",
+        remaining: "#ff9800"
+      };
+
 
 function getStoredToken() {
   return localStorage.getItem("authToken");
@@ -185,6 +190,7 @@ milestones.forEach(m => {
   L.circleMarker(m.coord, {
     pane: "milestones",
     radius: 5,
+
     color: "#222",
     fillColor: "#ffd54f",
     fillOpacity: 1,
@@ -256,7 +262,7 @@ function renderJourney(km) {
 
     // Draw full route as dashed "remaining"
     remainingLine = L.polyline(route, {
-      color: '#888',
+      color: ROUTE_COLORS.remaining,
       weight: 3,
       dashArray: '6,6'
     }).addTo(map);
@@ -280,7 +286,7 @@ function renderJourney(km) {
   // Draw completed part
   if (completed.length >= 2) {
     completedLine = L.polyline(completed, {
-      color: '#4caf50',
+      color: ROUTE_COLORS.completed,
       weight: 5
     }).addTo(map);
   }
@@ -288,7 +294,7 @@ function renderJourney(km) {
   // Draw remaining part
   if (remaining.length >= 2) {
     remainingLine = L.polyline(remaining, {
-      color: '#ff9800',
+      color: ROUTE_COLORS.remaining,
       weight: 3,
       dashArray: '6,6'
     }).addTo(map);
