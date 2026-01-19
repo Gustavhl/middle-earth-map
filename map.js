@@ -68,7 +68,7 @@ const TOTAL_KM = 2863;
 
 const milestones = [
   { name: "Hobbiton", km: 0, coord: [1113, 525] },
-  { name: "House of Tom Bombadil", km: 120, coord: [{]1083, 616] },
+  { name: "House of Tom Bombadil", km: 120, coord: [1083, 616] },
   { name: "Bree", km: 220, coord: [1105, 666] },
   { name: "Weathertop", km: 300, coord: [1111, 772] },
   { name: "Rivendell", km: 740, coord: [1129, 990] },
@@ -288,7 +288,7 @@ function renderJourney(km) {
   // Draw remaining part
   if (remaining.length >= 2) {
     remainingLine = L.polyline(remaining, {
-      color: '#888',
+      color: '#ff9800',
       weight: 3,
       dashArray: '6,6'
     }).addTo(map);
