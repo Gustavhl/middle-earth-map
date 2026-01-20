@@ -397,19 +397,57 @@ renderJourney(displayedKm);
 async function syncFromStrava() {
   const token = localStorage.getItem("authToken");
 
-  const res = await fetch(`${BACKEND_URL}/distance`, {
-    headers: {
-      "x-auth-token": token
-    }
-  });
+  let res;
+  try {
+    res = await fetch(`${BACKEND_URL}/distance`, {
+      headers: {
+        "x-auth-token": token
+      }
+    });
+  } catch (err) {
+    alert("Backend unreachable");
+    return;
+  }
 
+  // 🔒 App auth failed
   if (res.status === 401) {
-    alert("Unauthorized — please log in again");
+    // Try to determine if this is Strava auth or app auth
+    const text = await res.text();
+
+    if (text.includes("Not authenticated")) {
+      // Strava auth missing/expired
+      handleStravaReauth();
+      return;
+    }
+
+    // App auth failed
+    alert("Session expired — please log in again");
+    localStorage.removeItem("authToken");
+    location.reload();
+    return;
+  }
+
+  if (!res.ok) {
+    alert("Failed to sync from Strava");
     return;
   }
 
   const data = await res.json();
   animateToKm(data.meters / 1000);
+}
+
+function handleStravaReauth() {
+  const confirmed = confirm(
+    "Strava authentication required.\n\n" +
+    "Click OK to reconnect with Strava in a new tab."
+  );
+
+  if (!confirmed) return;
+
+  window.open(
+    "https://middle-earth-strava.onrender.com/login",
+    "_blank"
+  );
 }
 
 loginFlow();
