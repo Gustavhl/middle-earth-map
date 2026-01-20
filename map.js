@@ -218,7 +218,7 @@ console.log("is array:", Array.isArray(routeGeom.segments));
 milestones.forEach(m => {
   L.circleMarker(m.coord, {
     pane: "milestones",
-    radius: 5,
+    radius: 10,
 
     color: "#222",
     fillColor: "#ffd54f",
@@ -247,8 +247,6 @@ const marker = L.circleMarker(route[0], {
   fillColor: '#ffdd88',
   fillOpacity: 1
 }).addTo(map);
-
-marker.bringToFront();
 
 // =======================
 // DISTANCE INTERPOLATION
@@ -304,14 +302,11 @@ function renderJourney(km) {
       <div><em>At Hobbiton — the journey begins</em></div>
     `;
     return;
-
-    marker.bringToFront();
   }
 
   // 🟢 NORMAL CASE
   const pos = getPointAtRatio(routeGeom, ratio);
   marker.setLatLng(pos);
-  marker.bringToFront();
 
   const { completed, remaining } = splitRouteAtRatio(routeGeom, ratio);
 
