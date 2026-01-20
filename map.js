@@ -40,6 +40,7 @@ async function loginFlow() {
   const btn = document.getElementById("login-btn");
   const input = document.getElementById("password");
   const error = document.getElementById("login-error");
+  const spinner = document.getElementById("login-spinner");
 
   input.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && !btn.disabled) {
