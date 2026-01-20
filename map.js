@@ -74,12 +74,14 @@ async function loginFlow() {
     error.textContent = "";
 
     btn.disabled = true;
+    input.disabled = true;
     spinner.classList.remove("hidden");
 
     setToken(token);
     await attemptLogin(token);
 
     btn.disabled = false;
+    input.disabled = false;
     spinner.classList.add("hidden");
   };
 
