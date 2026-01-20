@@ -71,7 +71,25 @@
             color: #ff6b6b;
             margin-top: 8px;
         }
+        .spinner {
+            width: 28px;
+            height: 28px;
+            margin: 16px auto 0;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top-color: #ffd54f;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
 
+        .hidden {
+            display: none;
+        }
+
+        @keyframes spin {
+        to {
+            transform: rotate(360deg);
+            }
+        }
 
     </style>
 </head>
@@ -95,6 +113,7 @@
         />
         <button id="login-btn">Enter</button>
         <div id="login-error"></div>
+        <div id="login-spinner" class="spinner hidden"></div>
     </div>
 </div>
 

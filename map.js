@@ -41,23 +41,45 @@ async function loginFlow() {
   const input = document.getElementById("password");
   const error = document.getElementById("login-error");
 
-  async function attemptLogin(token) {
-    const ok = await validateToken(token);
-    if (!ok) {
-      error.textContent = "Invalid password";
-      clearToken();
-      return;
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !btn.disabled) {
+      btn.click();
     }
+  });
 
-    overlay.style.display = "none";
-    initApp(); // 🚀 ONLY NOW load the map
+  async function attemptLogin(token) {
+    try {
+      const ok = await validateToken(token);
+
+      if (!ok) {
+        error.textContent = "Invalid password";
+        clearToken();
+        return;
+      }
+
+      overlay.style.display = "none";
+      initApp();
+    } catch (e) {
+      error.textContent = "Server unreachable";
+      clearToken();
+    }
   }
+
 
   btn.onclick = async () => {
     const token = input.value.trim();
     if (!token) return;
+
+    error.textContent = "";
+
+    btn.disabled = true;
+    spinner.classList.remove("hidden");
+
     setToken(token);
     await attemptLogin(token);
+
+    btn.disabled = false;
+    spinner.classList.add("hidden");
   };
 
   const existing = getStoredToken();
