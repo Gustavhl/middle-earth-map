@@ -133,17 +133,21 @@ const bounds = [[0, 0], [IMAGE_HEIGHT, IMAGE_WIDTH]];
 L.imageOverlay('LOTR_complete_map.jpg', bounds).addTo(map);
 map.fitBounds(bounds);
 
-map.on("click", (e) => {
-  const x = e.latlng.lng;
-  const y = e.latlng.lat;
+// =======================
+// Mark spots on the map
+// =======================
 
-  L.circleMarker([y, x], {
-    radius: 4,
-    color: "red"
-  }).addTo(map);
+// map.on("click", (e) => {
+//  const x = e.latlng.lng;
+//  const y = e.latlng.lat;
 
-  console.log(`[${Math.round(y)}, ${Math.round(x)}],`);
-});
+//  L.circleMarker([y, x], {
+//    radius: 4,
+//    color: "red"
+//  }).addTo(map);
+
+//  console.log(`[${Math.round(y)}, ${Math.round(x)}],`);
+//});
 
 // =======================
 // ROUTE (PIXEL COORDS)
@@ -244,6 +248,8 @@ const marker = L.circleMarker(route[0], {
   fillOpacity: 1
 }).addTo(map);
 
+marker.bringToFront();
+
 // =======================
 // DISTANCE INTERPOLATION
 // =======================
@@ -281,6 +287,7 @@ function renderJourney(km) {
   // 🟢 START-OF-JOURNEY GUARD (CRITICAL)
   if (km <= 0.01) {
     marker.setLatLng(route[0]);
+    marker.bringToFront();
 
     if (completedLine) map.removeLayer(completedLine);
     if (remainingLine) map.removeLayer(remainingLine);
@@ -302,6 +309,7 @@ function renderJourney(km) {
   // 🟢 NORMAL CASE
   const pos = getPointAtRatio(routeGeom, ratio);
   marker.setLatLng(pos);
+  marker.bringToFront();
 
   const { completed, remaining } = splitRouteAtRatio(routeGeom, ratio);
 
