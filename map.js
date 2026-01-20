@@ -287,7 +287,7 @@ function renderJourney(km) {
   // 🟢 START-OF-JOURNEY GUARD (CRITICAL)
   if (km <= 0.01) {
     marker.setLatLng(route[0]);
-    marker.bringToFront();
+
 
     if (completedLine) map.removeLayer(completedLine);
     if (remainingLine) map.removeLayer(remainingLine);
@@ -304,6 +304,8 @@ function renderJourney(km) {
       <div><em>At Hobbiton — the journey begins</em></div>
     `;
     return;
+
+    marker.bringToFront();
   }
 
   // 🟢 NORMAL CASE
