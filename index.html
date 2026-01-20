@@ -158,7 +158,27 @@
             font-style: italic;
         }
 
+        html, body {
+         background: #e9dfc7;
+        }
 
+        #map {
+            background: radial-gradient(
+            ellipse at center,
+            #f4ecd6 0%,
+            #e6dbc0 70%,
+            #d8caa6 100%
+        );
+        }
+
+        #map::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.25);
+            z-index: 400;
+        }
     </style>
 </head>
 <body>
