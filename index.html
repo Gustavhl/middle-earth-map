@@ -10,6 +10,13 @@
     />
 
     <style>
+        @font-face {
+            font-family: "ElvenCommonSpeak";
+            src: url("fonts/ElvenCommonSpeak-0WXz.ttf") format("truetype");
+            font-weight: normal;
+            font-style: normal;
+        }
+
         html, body {
           margin: 0;
           height: 100%;
@@ -54,6 +61,12 @@
         }
 
         .overlay h1::after {
+            font-family: "ElvenCommonSpeak", "Cormorant Garamond", serif;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            opacity: 0.9;
+            text-shadow: 0 0 4px rgba(191, 167, 106, 0.4);
+            letter-spacing: 0.12em;
             content: "";
             display: block;
             width: 70%;
