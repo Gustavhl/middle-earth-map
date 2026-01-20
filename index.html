@@ -51,7 +51,7 @@
           color: #000000;
         }
 
-        .overlay h1 {
+        #overlay-title h1 {
             font-family: "ElvenCommonSpeak" !important;
             font-size: 1.4rem;
             text-transform: uppercase;
@@ -65,7 +65,7 @@
             text-transform: uppercase;
         }
 
-        .overlay h1::after {
+        #overlay-title h1::after {
             content: "";
             display: block;
             width: 70%;
@@ -222,12 +222,13 @@
             box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.25);
             z-index: 400;
         }
+
     </style>
 </head>
 <body>
 
 <div class="overlay">
-    <div><strong>Journey Through Middle-earth</strong></div>
+    <div id="overlay-title"><strong>Journey Through Middle-earth</strong></div>
     <div id="status">Loading…</div>
     <button onclick="syncFromStrava()">
         Sync from Strava
