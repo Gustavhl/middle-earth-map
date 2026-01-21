@@ -243,8 +243,8 @@ milestones.forEach(m => {
 
 const marker = L.circleMarker(route[0], {
   radius: 8,
-  color: '#ffdd88',
-  fillColor: '#ffdd88',
+  color: '#4a6741',
+  fillColor: '#3f5a36',
   fillOpacity: 1
 }).addTo(map);
 
