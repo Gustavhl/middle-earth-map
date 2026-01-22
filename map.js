@@ -133,6 +133,12 @@ const bounds = [[0, 0], [IMAGE_HEIGHT, IMAGE_WIDTH]];
 L.imageOverlay('LOTR_complete_map.jpg', bounds).addTo(map);
 map.fitBounds(bounds);
 
+const ringIcon = L.icon({
+  iconUrl: "ring-icon-small.png",
+  iconSize: [32, 32],      // display size
+  iconAnchor: [16, 16]     // center of icon sits on route
+});
+
 // =======================
 // Mark spots on the map
 // =======================
@@ -241,11 +247,8 @@ milestones.forEach(m => {
 // MARKER
 // =======================
 
-const marker = L.circleMarker(route[0], {
-  radius: 8,
-  color: '#4a6741',
-  fillColor: '#3f5a36',
-  fillOpacity: 1
+const marker = L.marker(route[0], {
+  icon: ringIcon
 }).addTo(map);
 
 // =======================
@@ -426,6 +429,9 @@ function animateToKm(targetKm) {
   window.animateToKm = animateToKm;
 
 renderJourney(displayedKm);
+marker.setLatLng(pos);
+marker.bringToFront();
+
 }
 
 async function syncFromStrava() {
