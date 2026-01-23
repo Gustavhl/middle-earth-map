@@ -7,6 +7,10 @@
     <link rel="icon" type="image/png" href="ring-icon.png">
     <meta name="robots" content="noimageindex, noindex">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3f5a36">
+
+
     <link
             rel="stylesheet"
             href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -297,6 +301,12 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="map.js"></script>
+
+<script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js");
+    }
+</script>
 
 </body>
 </html>
