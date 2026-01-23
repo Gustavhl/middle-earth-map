@@ -429,8 +429,8 @@ function animateToKm(targetKm) {
   window.animateToKm = animateToKm;
 
 renderJourney(displayedKm);
-marker.setLatLng(pos);
-marker.bringToFront();
+// marker.setLatLng(pos);
+// marker.bringToFront();
 
 }
 
