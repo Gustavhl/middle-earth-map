@@ -5,6 +5,7 @@ let completedLine;
 let remainingLine;
 let displayedKm = 0;
 let animationFrame = null;
+let hasAutoZoomed = false;
 
 const BACKEND_URL = "https://middle-earth-strava.onrender.com";
 const ROUTE_COLORS = {
@@ -310,6 +311,12 @@ function renderJourney(km) {
   // 🟢 NORMAL CASE
   const pos = getPointAtRatio(routeGeom, ratio);
   marker.setLatLng(pos);
+
+  if (!hasAutoZoomed) {
+    map.setView(pos, -1, { animate: false });
+    hasAutoZoomed = true;
+  }
+
 
   const { completed, remaining } = splitRouteAtRatio(routeGeom, ratio);
 
