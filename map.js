@@ -37,6 +37,9 @@ async function validateToken(token) {
 }
 
 async function loginFlow() {
+
+  fetch(`${BACKEND_URL}/auth-check`).catch(() => {});
+
   const overlay = document.getElementById("login-overlay");
   const btn = document.getElementById("login-btn");
   const input = document.getElementById("password");
