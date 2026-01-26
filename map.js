@@ -38,7 +38,19 @@ async function validateToken(token) {
 
 async function loginFlow() {
 
-  fetch(`${BACKEND_URL}/auth-check`).catch(() => {});
+setTimeout(() => {
+  const status = document.getElementById("backend-status");
+  if (status) status.classList.remove("hidden");
+
+  fetch(`${BACKEND_URL}/auth-check`)
+    .finally(() => {
+      // Hide after wake attempt (even if it 401s)
+      setTimeout(() => {
+        if (status) status.classList.add("hidden");
+      }, 1500);
+    })
+    .catch(() => {});
+}, 1000);
 
   const overlay = document.getElementById("login-overlay");
   const btn = document.getElementById("login-btn");

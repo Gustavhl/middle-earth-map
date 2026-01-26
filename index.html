@@ -232,6 +232,14 @@
             animation: spin 0.9s linear infinite;
         }
 
+        .backend-status {
+          margin-top: 10px;
+          font-size: 0.9rem;
+          font-style: italic;
+          opacity: 0.75;
+          color: #5c4a2a;
+        }
+
         .hidden {
             display: none;
         }
@@ -293,6 +301,9 @@
         <button id="login-btn" class="tolkien-button">Enter</button>
         <p class="login-flavor">Only those who know the way may enter.</p>
         <div id="login-error"></div>
+        <div id="backend-status" class="backend-status hidden">
+            Waking the servers of Gondor…
+        </div>
         <div id="login-spinner" class="spinner hidden"></div>
     </div>
 </div>
