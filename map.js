@@ -159,17 +159,17 @@ const ringIcon = L.icon({
 // Mark spots on the map
 // =======================
 
-// map.on("click", (e) => {
-//  const x = e.latlng.lng;
-//  const y = e.latlng.lat;
+ map.on("click", (e) => {
+  const x = e.latlng.lng;
+  const y = e.latlng.lat;
 
 //  L.circleMarker([y, x], {
 //    radius: 4,
 //    color: "red"
 //  }).addTo(map);
 
-//  console.log(`[${Math.round(y)}, ${Math.round(x)}],`);
-//});
+  console.log(`[${Math.round(y)}, ${Math.round(x)}],`);
+});
 
 // =======================
 // ROUTE (PIXEL COORDS)
