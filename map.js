@@ -117,6 +117,8 @@ const milestones = [
   { name: "House of Tom Bombadil", km: 120, coord: [1083, 616] },
   { name: "Bree", km: 220, coord: [1105, 666] },
   { name: "Weathertop", km: 300, coord: [1111, 772] },
+  { name: "The Last Bridge", km: 500, coord: [1132, 880] },
+  { name: "Trollshaws", km: 550, coord: [1125, 930] },
   { name: "Rivendell", km: 740, coord: [1129, 990] },
   { name: "Redhorn Pass", km: 870, coord: [1029, 1002] },
   { name: "Moria (East Gate)", km: 1000, coord: [945, 990] },
@@ -181,6 +183,7 @@ const route = [
   [1083, 616],  // House of Tom Bombadil
   [1105, 666],  // Bree
   [1111, 772],  // Weather Hills / Weathertop
+  [1132, 880],  // The Last Bridge
   [1125, 930],  // Trollshaws
   [1129, 990],  // Rivendell
 
