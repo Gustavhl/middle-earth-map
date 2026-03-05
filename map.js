@@ -428,14 +428,15 @@ function splitRouteAtRatio(routeGeom, ratio) {
   return { completed, remaining };
 }
 
-function animateToKm(targetKm) {
+function
+animateToKm(targetKm) {
      if (Math.abs(targetKm - displayedKm) < 0.01) {
         renderJourney(displayedKm);
         return;
      }
     const startKm = displayedKm;
     const delta = targetKm - startKm;
-    const duration = Math.min(Math.abs(delta) * 8, 2000);
+    const duration = Math.min(Math.abs(delta) * 8, 5000);
     const startTime = performance.now();
 
     function step(now) {
