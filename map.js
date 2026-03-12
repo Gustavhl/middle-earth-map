@@ -436,7 +436,7 @@ animateToKm(targetKm) {
      }
     const startKm = displayedKm;
     const delta = targetKm - startKm;
-    const duration = Math.min(Math.abs(delta) * 8, 5000);
+    const duration = 5000;
     const startTime = performance.now();
 
     function step(now) {
