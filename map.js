@@ -6,6 +6,7 @@ let remainingLine;
 let displayedKm = 0;
 let animationFrame = null;
 let hasAutoZoomed = false;
+let isAnimating = false;
 
 const BACKEND_URL = "https://middle-earth-strava.onrender.com";
 const ROUTE_COLORS = {
@@ -434,6 +435,7 @@ animateToKm(targetKm) {
         renderJourney(displayedKm);
         return;
      }
+    isAnimating = true;
     const startKm = displayedKm;
     const delta = targetKm - startKm;
     const duration = 5000;
@@ -446,7 +448,11 @@ animateToKm(targetKm) {
       displayedKm = startKm + delta * eased;
       renderJourney(displayedKm);
 
-      if (t < 1) requestAnimationFrame(step);
+      if (t < 1) {
+        requestAnimationFrame(step);
+      } else {
+       isAnimating = false;
+      }
     }
 
     requestAnimationFrame(step);
