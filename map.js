@@ -336,7 +336,7 @@ function renderJourney(km) {
  //   hasAutoZoomed = true;
  // }
   if (isAnimating) {
-    map.setView(pos, 1, { animate: false });
+    map.setView(pos, 2, { animate: false });
   } else if (!hasAutoZoomed) {
     map.setView(pos, -1, { animate: false });
     hasAutoZoomed = true;
