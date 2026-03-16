@@ -331,11 +331,16 @@ function renderJourney(km) {
   const pos = getPointAtRatio(routeGeom, ratio);
   marker.setLatLng(pos);
 
-  if (!hasAutoZoomed) {
+ // if (!hasAutoZoomed) {
+ //   map.setView(pos, -1, { animate: false });
+ //   hasAutoZoomed = true;
+ // }
+  if (isAnimating) {
+    map.setView(pos, 1, { animate: false });
+  } else if (!hasAutoZoomed) {
     map.setView(pos, -1, { animate: false });
     hasAutoZoomed = true;
   }
-
 
   const { completed, remaining } = splitRouteAtRatio(routeGeom, ratio);
 
